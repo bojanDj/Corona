@@ -22,6 +22,9 @@
 (defn start []
   (alter-var-root #'system component/start-system))
 
+(defn stop []
+  (alter-var-root #'system component/stop-system))
+
 (defn -main []
   (init)
   (start))

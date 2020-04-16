@@ -1,6 +1,6 @@
 (ns corona.server
   (:require [com.stuartsierra.component :as component]
-            [bidi.ring :refer [make-handler]]
+            [bidi.ring :refer [make-handler resources]]
             [aleph.http :as http]
             [ring.util.response :as res]
             [ring.util.request :as req]
@@ -13,21 +13,26 @@
         uuid (store/insert-country-in-db store content)]
     (res/redirect (str "/" uuid) :see-other)))
 
-(defn handle-index [request]
+(defn handle-search [request]
   (res/response (view/render-form)))
 
-(defn index-handler [store request]
+(defn search-handler [store request]
   (if (= (:request-method request) :post)
     (handle-post store request)
-    (handle-index request)))
+    (handle-search request)))
+
+(defn news-handler [request]
+  (res/response (view/news)))
 
 (defn result-handler [store request]
   (let [paste (store/get-country-by-uuid store (:uuid (:route-params request)))]
     (res/response (view/render-result paste))))
 
 (defn handler [store]
-  (make-handler ["/" {"" (partial index-handler store)
-                      [:uuid] (partial result-handler store)}]))
+  (make-handler ["/" {"index" (partial news-handler)
+                      "search" (partial search-handler store)
+                      [:uuid] (partial result-handler store)
+                      "" (resources {:prefix "public/"})}]))
 
 (defn app
   [store]

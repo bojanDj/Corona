@@ -36,5 +36,6 @@
 			<attribute name="optional" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/Bojan/Desktop/cljs.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
