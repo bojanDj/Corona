@@ -32,6 +32,32 @@
  )
 )
 
+(defn get-data-map [url rb] 
+           (let [sc (new java.util.Scanner (.openStream url))]
+            (def inline "")
+            (while (.hasNext sc) (do (def inline (str inline (.nextLine sc)))))
+            (.close sc)
+            (def json (json/read-str inline :key-fn keyword))
+            (def mapa {:title (get-in (:articles json) [rb :title]) 
+                       :desc (get-in (:articles json) [rb :description]) 
+                       :img (get-in (:articles json) [rb :urlToImage]) 
+                       :content (get-in (:articles json) [rb :content])
+                       })
+            mapa
+           )
+         )
+
+(defn get-updates [rb] 
+     (let [url (new java.net.URL  "http://newsapi.org/v2/top-headlines?q=virus&country=rs&from=2020-03-30&apiKey=5c9694ca2b7147039cd6614c21cb361c" )
+           con (doto (.. url openConnection)
+                     (.setInstanceFollowRedirects false)
+                     (.connect))]
+           (if (.startsWith (str (.getResponseCode con)) "200")
+               (get-data-map url rb)
+               nil)
+    )
+   )
+
 (defn get-country-by-uuid [store uuid]
    (open-connection ((keyword uuid) @(:data store))) 
 )

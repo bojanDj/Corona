@@ -46,6 +46,8 @@
 					        (link-to {:class "nav-link"} "/index" "Početna")]
                  [:li 
 					        (link-to {:class "nav-link"} "/search" "Druga")]
+                 [:li 
+					        (link-to {:class "nav-link"} "/updates" "Novosti")]
 					       [:li 
 					        [:a {:class "nav-link"} "Stop server"]]]]]]]]]
           text
@@ -65,41 +67,55 @@
 	                   [:div]
 	                   (submit-button "Pretrazi"))]))
   
-  (defn news []
+  (defn news [news1 news2 news3]
 	  (header
 		  [:div {:class "ftco-blocks-cover-1"}   
 			 [:section {:class "hero-section"}
 			  [:div {:class "hero-slider owl-carousel"}
 			   [:div {:class "hs-item"}
-			    [:div {:class "hs-bg set-bg sm-overlay", :id "hero1", :style "margin-top:10%; background-size: 100%; background-repeat: no-repeat;", :data-setbg "https://www.serbianmonitor.com/wp-content/uploads/2020/03/Coronavirus.png"}]
-			    [:div {:class "sp-container"}
+			    [:div {:class "hs-bg set-bg sm-overlay", :id "hero1", :style " margin-top: 7%; background-size: 100%; background-repeat: no-repeat;", :data-setbg (:img news1)}]
+			    [:div {:class "sp-container" :style " margin-top: 7%;"}
 			     [:div {:class "hs-text"}
-			      [:h2 "Prva" 
+			      [:h2 "Najnovija" 
 			       [:br]"Vest"]
-			      [:p "Naslov" 
-			       [:br]"Vest"]
+			      [:p {:class "pclass"} (:title news1)]
 			      [:p 
-			       [:a {:class "btn btn-secondary"} "Pogledajte"]]]]]
+			       (link-to {:class "btn btn-secondary"} "/updates" "Pogledajte")]]]]
 			   [:div {:class "hs-item"}
-			    [:div {:class "hs-bg set-bg sm-overlay", :style "background-size: 100%; margin-top:10%; background-repeat: no-repeat;", :data-setbg "https://www.serbianmonitor.com/wp-content/uploads/2020/03/Coronavirus.png"}]
-			    [:div {:class "sp-container"}
+			    [:div {:class "hs-bg set-bg sm-overlay", :id "hero1", :style " margin-top: 7%; background-size: 100%; background-repeat: no-repeat;", :data-setbg (:img news2)}]
+			    [:div {:class "sp-container" :style " margin-top: 7%;"}
 			     [:div {:class "hs-text"}
-			      [:h2 "Druga" 
+			      [:h2 "Najnovija" 
 			       [:br]"Vest"]
-			      [:p "Naslov" 
-			       [:br]"Vest"] 
+			      [:p {:class "pclass"} (:title news2)]
 			      [:p 
-			       [:a {:href "galerija.php?rez=BMW 328", :class "btn btn-secondary"} "Pogledajte"]]]]]
+			       (link-to {:class "btn btn-secondary"} "/updates" "Pogledajte")]]]]
 			   [:div {:class "hs-item"}
-			    [:div {:class "hs-bg set-bg sm-overlay", :style "background-size: 100%; margin-top:10%; background-repeat: no-repeat;", :data-setbg "https://www.serbianmonitor.com/wp-content/uploads/2020/03/Coronavirus.png"}]
-			    [:div {:class "sp-container"}
+			    [:div {:class "hs-bg set-bg sm-overlay", :style "margin-top: 7%; background-size: 100%;  background-repeat: no-repeat;", :data-setbg (:img news3)}]
+			    [:div {:class "sp-container" :style " margin-top: 7%;"}
 			     [:div {:class "hs-text"}
-			      [:h2 "Druga" 
+			      [:h2 "Najnovija" 
 			       [:br]"Vest"]
-			      [:p "Naslov" 
-			       [:br]"Vest"]
+			      [:p {:class "pclass"} (:title news3)]
 			      [:p 
-			       [:a {:class "btn btn-secondary"} "Pogledajte"]]]]]]]]))
+			       (link-to {:class "btn btn-secondary"} "/updates" "Pogledajte")]]]]]]]))
   
+  (defn list-item [title desc img content] 
+    [:div {:class "col-xs-12 col-sm-12 col-md-12 col-lg-12"}
+			 [:div {:class "thumbnail"}
+			  [:div {:class "post_title"} title]
+			  [:img {:src img, :class "img-responsive", :alt "slika", :style "border-radius:8px;"}]
+			  [:div {:class "caption"}
+			   [:p desc]
+			   [:details 
+			    [:summary "Opširinije"]
+			    [:p content]]
+			   [:div {:class "text-right"}
+			    [:p "16.04.2020."]]]]]
+    )
+
+  (defn updates [& args] 
+    (html5 [:head][:body (header "") args])
+    )
   
   
