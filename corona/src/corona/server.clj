@@ -11,7 +11,7 @@
 (defn handle-post [store request]
   (let [content (get (:form-params request) "content")
         uuid (store/insert-country-in-db store content)]
-    (res/redirect (str "/" uuid) :see-other)))
+    (res/redirect (str "search/" uuid) :see-other)))
 
 (defn handle-search [request]
   (res/response (view/render-form)))
@@ -42,9 +42,9 @@
 
 (defn handler [store]
   (make-handler ["/" {"index" (partial news-handler)
-                      "search" (partial search-handler store)
+                      "search" { "" (partial search-handler store)
+                                ["/" :uuid] (partial result-handler store)}
                       ["updates/" :page] (partial updates-page-handler) 
-                      [:uuid] (partial result-handler store)
                       "" (resources {:prefix "public/"})}]))
 
 (defn app
@@ -57,7 +57,7 @@
   component/Lifecycle
 
   (start [this]
-    (assoc this :server (http/start-server (app (:store this)) {:port 8092})))
+    (assoc this :server (http/start-server (app (:store this)) {:port 8155})))
 
   (stop [this]
     (dissoc this :server)))

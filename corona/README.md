@@ -1,10 +1,16 @@
 # corona
 
-A Clojure library designed to ... well, that part is up to you.
+A Clojure library designed to track coronavirus, show statistics and news abouth it.
 
-## Usage
+## Prerequisites
 
-FIXME
+You will need Leiningen 2.0.0 or above installed.
+
+## Running
+
+To start a web server for the application, run:
+
+	lein run
 
 ## License
 

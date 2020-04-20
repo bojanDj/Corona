@@ -158,6 +158,9 @@ color: #fff; }
 }
 #stay-home {
   text-align: center;
+  font-size: 100px; 
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  margin-top: 10%;
 }
 #iframe {
   float:left; 

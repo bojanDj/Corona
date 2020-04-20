@@ -20,7 +20,8 @@
     (alter-var-root #'system (constantly sys))))
 
 (defn start []
-  (alter-var-root #'system component/start-system))
+  (alter-var-root #'system component/start-system)
+  (println "Start"))
 
 (defn stop []
   (alter-var-root #'system component/stop-system))
@@ -28,3 +29,9 @@
 (defn -main []
   (init)
   (start))
+
+(defn test-system [] 
+  (init)
+  (start)
+  system
+)

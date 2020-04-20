@@ -95,8 +95,8 @@
     [:div 
 	     [:iframe {:id "iframe" :scrolling "no", :marginheight "0", :marginwidth "0", :src (str "https://maps.google.com/maps?q=" (:la result) "," (:lo result) "&hl=en&z=3&output=embed"), :width "500", :height "400", :frameborder "0"}]
       [:div {:id "result"}
-	     [:pre {:style "text-size: 10px;"} [:code (:resp result)]] 
-       [:p {:id "stay-home"} "Stay home!"]]
+	     [:pre [:code (:resp result)]] 
+       [:p {:id "stay-home"} "#StayHome!"]]
       (slider mapa)
      ]))
 

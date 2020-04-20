@@ -9,4 +9,5 @@
                  [org.clojure/data.json "1.0.0"]
                  [aleph "0.4.6"]
                  [hiccup "1.0.5"]
-                 [bidi "2.1.3"]])
+                 [bidi "2.1.3"]
+                 [ring/ring-mock "0.3.2"]])
