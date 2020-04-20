@@ -14,14 +14,19 @@
 					[:link {:rel "stylesheet", :href "css/owl.carousel.min.css"}]
 					[:link {:href "https://fonts.googleapis.com/css?family=Muli:400,700|Hepta+Slab:400,700&display=swap", :rel "stylesheet"}]
 					[:link {:rel "stylesheet", :href "fonts/icomoon/style.css"}]
-					[:link {:rel "stylesheet", :href "css/bootstrap.min.css"}]
-					[:link {:rel "stylesheet", :href "css/style.css"}]
+					[:link {:rel "stylesheet", :href "/css/bootstrap.min.css"}]
+					[:link {:rel "stylesheet", :href "/css/style.css"}]
           [:script {:src "js/jquery-3.3.1.min.js"}]
 					[:script {:src "js/jquery-3.2.1.min.js"}]
 					[:script {:src "js/jquery.slicknav.min.js"}]
 					[:script {:src "js/owl.carousel.min.js"}]
 					[:script {:src "js/aos.js"}]
-					[:script {:src "js/main.js"}]]
+					[:script {:src "js/main.js"}]
+			    [:link {:rel "stylesheet", :href "https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"}]
+					[:script {:src "https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"}]
+					[:script {:src "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"}]
+					[:script {:src "https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"}]
+		     ]
          
          [:body
           [:div {:class "site-wrap", :id "home-section"}  
@@ -43,79 +48,111 @@
 					     [:nav {:class "site-navigation text-right ml-auto d-none d-lg-block", :role "navigation"} 
 					      [:ul {:class "site-menu main-menu js-clone-nav ml-auto "}
 					       [:li {:class "active"}
-					        (link-to {:class "nav-link"} "/index" "Početna")]
+					        (link-to {:class "nav-link"} "/index" "Home")]
                  [:li 
-					        (link-to {:class "nav-link"} "/search" "Druga")]
+					        (link-to {:class "nav-link"} "/search" "Search")]
                  [:li 
-					        (link-to {:class "nav-link"} "/updates" "Novosti")]
-					       [:li 
-					        [:a {:class "nav-link"} "Stop server"]]]]]]]]]
+					        (link-to {:class "nav-link"} "/updates/1" "News")]]]]]]]]
           text
           ]))
+(defn slider-item [vest] 
+  [:div {:class "col-sm-12 col-lg-4"} 
+         [:div {:class "card", :style "width: 300px;margin: auto;"} 
+          [:img {:src (:img vest), :class "card-img-top"}]
+          [:div {:class "card-body"} 
+           [:h4 {:class "card-title"} (:title vest)]
+           [:p {:class "card-text"} (:desc vest)]
+           [:button {:type "button", :class "btn btn-secondary"} "Read more"]]]]
+  )
+(defn slider [mapa] 
+  [:div {:class "container-fluid"} 
+ [:div {:class "row"}
+  [:div {:class "col-sm-12"}  
+   [:div {:id "inam", :class "carousel slide", :data-ride "carousel"}
+    [:div {:class "carousel-inner"}
+     [:div {:class "carousel-item active"} 
+      [:div {:class "container"} 
+       [:div {:class "row"}  
+        (for [x (range 1 4)]
+          (slider-item ((keyword (java.lang.Long/toString x)) mapa))           
+          )
+   ]]]
+     [:div {:class "carousel-item"} 
+      [:div {:class "container"} 
+       [:div {:class "row"} 
+         (for [x (range 4 7)]
+          (slider-item ((keyword (java.lang.Long/toString x)) mapa))           
+          )
+   ]]]]
+      [:a {:href "#inam", :class "carousel-control-prev", :data-slide "prev"} 
+     [:span {:class "carousel-control-prev-icon" :style "background-color: black; color: black;"}]]
+    [:a {:href "#inam", :class "carousel-control-next", :data-slide "next"} 
+     [:span {:class "carousel-control-next-icon" :style "background-color: black; color: black;"}]]]]]]
+  )
 
-(defn render-result [result]
+(defn render-result [result mapa]
   (header
-	  [:div {:id "result"}
-	       [:pre [:code result]]]))
+    [:div 
+	     [:iframe {:id "iframe" :scrolling "no", :marginheight "0", :marginwidth "0", :src (str "https://maps.google.com/maps?q=" (:la result) "," (:lo result) "&hl=en&z=3&output=embed"), :width "500", :height "400", :frameborder "0"}]
+      [:div {:id "result"}
+	     [:pre {:style "text-size: 10px;"} [:code (:resp result)]] 
+       [:p {:id "stay-home"} "Stay home!"]]
+      (slider mapa)
+     ]))
 
 (defn render-form []
   (header
 	  [:div {:id "form"}
 	          (form-to [:post "/search"]
-	                   (text-area {:cols 7
-	                               :rows 3} "content")
+	                   (text-area {:cols 75
+	                               :rows 1} "content")
 	                   [:div]
-	                   (submit-button "Pretrazi"))]))
-  
+	                   (submit-button "Search for country..."))]))
+
+(defn news-item [news] 
+  [:div {:class "hs-item"}
+			    [:div {:class "hs-bg set-bg sm-overlay", :id "hero1", :style " margin-top: 7%; background-size: 100%; background-repeat: no-repeat;", :data-setbg (:img news)}]
+			    [:div {:class "sp-container" :style " margin-top: 7%;"}
+			     [:div {:class "hs-text"}
+			      [:h2 "Latest" 
+			       [:br]"News"]
+			      [:p {:class "pclass"} (:title news)]
+			      [:p 
+			       (link-to {:class "btn btn-secondary"} "/updates/1" "Read more")]]]]
+  )
+
   (defn news [news1 news2 news3]
 	  (header
 		  [:div {:class "ftco-blocks-cover-1"}   
 			 [:section {:class "hero-section"}
 			  [:div {:class "hero-slider owl-carousel"}
-			   [:div {:class "hs-item"}
-			    [:div {:class "hs-bg set-bg sm-overlay", :id "hero1", :style " margin-top: 7%; background-size: 100%; background-repeat: no-repeat;", :data-setbg (:img news1)}]
-			    [:div {:class "sp-container" :style " margin-top: 7%;"}
-			     [:div {:class "hs-text"}
-			      [:h2 "Najnovija" 
-			       [:br]"Vest"]
-			      [:p {:class "pclass"} (:title news1)]
-			      [:p 
-			       (link-to {:class "btn btn-secondary"} "/updates" "Pogledajte")]]]]
-			   [:div {:class "hs-item"}
-			    [:div {:class "hs-bg set-bg sm-overlay", :id "hero1", :style " margin-top: 7%; background-size: 100%; background-repeat: no-repeat;", :data-setbg (:img news2)}]
-			    [:div {:class "sp-container" :style " margin-top: 7%;"}
-			     [:div {:class "hs-text"}
-			      [:h2 "Najnovija" 
-			       [:br]"Vest"]
-			      [:p {:class "pclass"} (:title news2)]
-			      [:p 
-			       (link-to {:class "btn btn-secondary"} "/updates" "Pogledajte")]]]]
-			   [:div {:class "hs-item"}
-			    [:div {:class "hs-bg set-bg sm-overlay", :style "margin-top: 7%; background-size: 100%;  background-repeat: no-repeat;", :data-setbg (:img news3)}]
-			    [:div {:class "sp-container" :style " margin-top: 7%;"}
-			     [:div {:class "hs-text"}
-			      [:h2 "Najnovija" 
-			       [:br]"Vest"]
-			      [:p {:class "pclass"} (:title news3)]
-			      [:p 
-			       (link-to {:class "btn btn-secondary"} "/updates" "Pogledajte")]]]]]]]))
+      (news-item news1) (news-item news2) (news-item news3)
+			 ;  (news-item (first args)) (news-item (second args)) (news-item (last args))
+
+;      (for [x args] 
+;        (news-item x))
+      ]]]))
   
-  (defn list-item [title desc img content] 
+  (defn list-item [map] 
     [:div {:class "col-xs-12 col-sm-12 col-md-12 col-lg-12"}
 			 [:div {:class "thumbnail"}
-			  [:div {:class "post_title"} title]
-			  [:img {:src img, :class "img-responsive", :alt "slika", :style "border-radius:8px;"}]
+			  [:div {:class "post_title"} (:title map)]
+			  [:img {:src (:img map), :class "img-responsive", :alt "slika", :style "border-radius:8px; height: 50%;"}]
 			  [:div {:class "caption"}
-			   [:p desc]
+			   [:p (:desc map)]
 			   [:details 
-			    [:summary "Opširinije"]
-			    [:p content]]
+			    [:summary "Read more"]
+			    [:p (:content map)]]
 			   [:div {:class "text-right"}
 			    [:p "16.04.2020."]]]]]
     )
 
   (defn updates [& args] 
-    (html5 [:head][:body (header "") args])
-    )
+    (html5 [:head][:body (header "") [:div {:id "ten-news"} args]
+                   [:iframe {:id "iframe-yt" :src "https://www.youtube.com/embed/NMre6IAAAiU?autoplay=1"} ]
+                   [:ul {:class "next-page-buttons"}
+                    (for [x (range 1 6)]
+                      [:li 
+                       (link-to {:class "btn btn-secondary"} (str "/updates/" x) x)])]]))
   
   

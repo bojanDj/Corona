@@ -22,29 +22,28 @@
     (handle-search request)))
 
 (defn news-handler [request]
-  (let [news1 (store/get-updates 0)
-        news2 (store/get-updates 1)
-        news3 (store/get-updates 2)]
-    (res/response (view/news news1 news2 news3))))
-;staviti u petlju!!!!!!
-(defn updates-handler [request]
-  (let [mapa1 (store/get-updates 0)
-        mapa2 (store/get-updates 1)
-        mapa3 (store/get-updates 2)
-        mapa4 (store/get-updates 3)]
-    (res/response (view/updates  (view/list-item (:title mapa1) (:desc mapa1) (:img mapa1) (:content mapa1))
-                                 (view/list-item (:title mapa2) (:desc mapa2) (:img mapa2) (:content mapa2))
-                                 (view/list-item (:title mapa3) (:desc mapa3) (:img mapa3) (:content mapa3))
-                                 (view/list-item (:title mapa4) (:desc mapa4) (:img mapa4) (:content mapa4))))))
+  (let [url "http://newsapi.org/v2/top-headlines?q=coronavirus&country=us&from=2020-03-30&apiKey=5c9694ca2b7147039cd6614c21cb361c"]
+    ;(res/response (view/news (for [x (range 0 3)] (store/get-updates x url)) ))))
+    (res/response (view/news (store/get-updates 0 url) (store/get-updates 1 url) (store/get-updates 2 url)))))
+
+(defn updates-page-handler [request]
+    (let [url "http://newsapi.org/v2/everything?q=coronavirus&from=2020-03-30&apiKey=5c9694ca2b7147039cd6614c21cb361c"
+          page (* (- (Integer/parseInt (:page (:route-params request))) 1) 4)]
+      (res/response (view/updates (for [x (range 0 4)]  (view/list-item (store/get-updates (+ page x) url)))))))
 
 (defn result-handler [store request]
-  (let [paste (store/get-country-by-uuid store (:uuid (:route-params request)))]
-    (res/response (view/render-result paste))))
+  (let [paste (store/get-country-by-uuid store (:uuid (:route-params request)))
+        url (str "http://newsapi.org/v2/everything?q=coronavirus+" (:name paste) "&from=2020-03-30&apiKey=5c9694ca2b7147039cd6614c21cb361c")
+        ;map1 {}
+        map1 {:1 (store/get-updates 0 url) :2 (store/get-updates 1 url) :3 (store/get-updates 2 url) :4 (store/get-updates 3 url) :5 (store/get-updates 4 url) :6 (store/get-updates 5 url)}]
+;    (for [x (range 0 6)]
+;       (def map1 (assoc map1 (keyword (java.lang.Long/toString (+ x 1))) (store/get-updates x url))))
+    (res/response (view/render-result paste map1))))
 
 (defn handler [store]
   (make-handler ["/" {"index" (partial news-handler)
                       "search" (partial search-handler store)
-                      "updates" (partial updates-handler)
+                      ["updates/" :page] (partial updates-page-handler) 
                       [:uuid] (partial result-handler store)
                       "" (resources {:prefix "public/"})}]))
 
@@ -58,7 +57,7 @@
   component/Lifecycle
 
   (start [this]
-    (assoc this :server (http/start-server (app (:store this)) {:port 8081})))
+    (assoc this :server (http/start-server (app (:store this)) {:port 8092})))
 
   (stop [this]
     (dissoc this :server)))

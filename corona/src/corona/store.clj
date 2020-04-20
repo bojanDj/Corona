@@ -18,17 +18,25 @@
    (while (.hasNext sc) (do (def inline (str inline (.nextLine sc)))))
    (.close sc)
    (def json (json/read-str inline :key-fn keyword))
-   (str stri "\nRegistrovano slucajeva: " (:confirmed (:latest json)) "\nBroj mrtvih: " (:deaths (:latest json)))
+   (def mapa {:resp (str stri " has " (:confirmed (:latest json)) " people infected with the coronavirus, which is " 
+                         (/ (* (:confirmed (:latest json)) 1000000) (get-in (:locations json) [0 :country_population])) " cases per milion of people. \nAlso " stri " has " 
+                         (:deaths (:latest json)) " people died from corona, which is  " 
+                         (/ (* (:confirmed (:latest json)) 1000000) (get-in (:locations json) [0 :country_population])) " dead people per one milion.") 
+              :name stri
+              :la (:latitude (get-in (:locations json) [0 :coordinates])) 
+              :lo (:longitude (get-in (:locations json) [0 :coordinates]))})
+   mapa
   )
 )
 (defn open-connection [stri] 
   (let [url (new java.net.URL (str "https://coronavirus-tracker-api.herokuapp.com/v2/locations?country=" stri))
+        map {:resp "Uneseno ime drzave nije validno."}
         con (doto (.. url openConnection)
                   (.setInstanceFollowRedirects false)
                   (.connect))]
         (if (.startsWith (str (.getResponseCode con)) "200")
             (get-data url stri)
-            "Uneseno ime drzave nije validno.")
+            map)
  )
 )
 
@@ -47,8 +55,8 @@
            )
          )
 
-(defn get-updates [rb] 
-     (let [url (new java.net.URL  "http://newsapi.org/v2/top-headlines?q=virus&country=rs&from=2020-03-30&apiKey=5c9694ca2b7147039cd6614c21cb361c" )
+(defn get-updates [rb url-str] 
+     (let [url (new java.net.URL url-str)
            con (doto (.. url openConnection)
                      (.setInstanceFollowRedirects false)
                      (.connect))]
