@@ -26,6 +26,10 @@
     ;(res/response (view/news (for [x (range 0 3)] (store/get-updates x url)) ))))
     (res/response (view/news (store/get-updates 0 url) (store/get-updates 1 url) (store/get-updates 2 url)))))
 
+(defn top-news-handler [request]
+    (let [url "http://newsapi.org/v2/top-headlines?q=coronavirus&country=us&from=2020-03-30&apiKey=5c9694ca2b7147039cd6614c21cb361c"]
+      (res/response (view/updatesTop (for [x (range 0 3)]  (view/list-item (store/get-updates x url)))))))
+
 (defn updates-page-handler [request]
     (let [url "http://newsapi.org/v2/everything?q=coronavirus&from=2020-03-30&apiKey=5c9694ca2b7147039cd6614c21cb361c"
           page (* (- (Integer/parseInt (:page (:route-params request))) 1) 4)]
@@ -45,6 +49,7 @@
                       "search" { "" (partial search-handler store)
                                 ["/" :uuid] (partial result-handler store)}
                       ["updates/" :page] (partial updates-page-handler) 
+                      "top-news" (partial top-news-handler)
                       "" (resources {:prefix "public/"})}]))
 
 (defn app
@@ -57,7 +62,7 @@
   component/Lifecycle
 
   (start [this]
-    (assoc this :server (http/start-server (app (:store this)) {:port 8155})))
+    (assoc this :server (http/start-server (app (:store this)) {:port 8096})))
 
   (stop [this]
     (dissoc this :server)))

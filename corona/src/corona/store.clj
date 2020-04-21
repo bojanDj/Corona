@@ -18,19 +18,27 @@
    (while (.hasNext sc) (do (def inline (str inline (.nextLine sc)))))
    (.close sc)
    (def json (json/read-str inline :key-fn keyword))
-   (def mapa {:resp (str stri " has " (:confirmed (:latest json)) " people infected with the coronavirus, which is " 
-                         (/ (* (:confirmed (:latest json)) 1000000) (get-in (:locations json) [0 :country_population])) " cases per milion of people. \nAlso " stri " has " 
-                         (:deaths (:latest json)) " people died from corona, which is  " 
-                         (/ (* (:confirmed (:latest json)) 1000000) (get-in (:locations json) [0 :country_population])) " dead people per one milion.") 
-              :name stri
-              :la (:latitude (get-in (:locations json) [0 :coordinates])) 
-              :lo (:longitude (get-in (:locations json) [0 :coordinates]))})
-   mapa
-  )
+   (let [stri (str (.toUpperCase (.substring stri 0 1)) (.substring stri 1))
+         confirmed (:confirmed (:latest json))
+         deaths (:deaths (:latest json))
+         population (get-in (:locations json) [0 :country_population])
+         casePerMil (/ (* confirmed 1000000) population)
+         deadPerMil (/ (* deaths 1000000) population)
+         mapa {:resp (str stri " has " (:confirmed (:latest json)) " people infected with the coronavirus, which is " 
+	                        (/ (* confirmed 1000000) population) " cases per milion of people. \nAlso " stri " has " 
+	                        (:deaths (:latest json)) " people died from corona, which is  " 
+	                        deadPerMil " dead people per one milion.") 
+	             :name stri
+	             :la (:latitude (get-in (:locations json) [0 :coordinates])) 
+	             :lo (:longitude (get-in (:locations json) [0 :coordinates]))}]
+	   mapa
+	   )
+   )
 )
 (defn open-connection [stri] 
   (let [url (new java.net.URL (str "https://coronavirus-tracker-api.herokuapp.com/v2/locations?country=" stri))
-        map {:resp "Uneseno ime drzave nije validno."}
+        map {:resp "Country name isn't good inserted."
+             :name "Sorry..."}
         con (doto (.. url openConnection)
                   (.setInstanceFollowRedirects false)
                   (.connect))]

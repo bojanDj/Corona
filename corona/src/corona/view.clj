@@ -29,7 +29,6 @@
 		     ]
          
          [:body
-          [:div {:class "site-wrap", :id "home-section"}  
 					 [:div {:class "site-mobile-menu site-navbar-target"} 
 					  [:div {:class "site-mobile-menu-header"} 
 					   [:div {:class "site-mobile-menu-close mt-3"} 
@@ -52,7 +51,11 @@
                  [:li 
 					        (link-to {:class "nav-link"} "/search" "Search")]
                  [:li 
-					        (link-to {:class "nav-link"} "/updates/1" "News")]]]]]]]]
+                  [:div {:class "dropdown"}
+									 [:div {:class "dropbtn"} "Dropdown"]
+									 [:div {:class "dropdown-content"}
+									  (link-to {:class "nav-link" :style "float: left;"} "/top-news" "Top news")
+									  (link-to {:class "nav-link" :style "float: left;"} "/updates/1" "All news")]]]]]]]]]
           text
           ]))
 (defn slider-item [vest] 
@@ -93,9 +96,10 @@
 (defn render-result [result mapa]
   (header
     [:div 
-	     [:iframe {:id "iframe" :scrolling "no", :marginheight "0", :marginwidth "0", :src (str "https://maps.google.com/maps?q=" (:la result) "," (:lo result) "&hl=en&z=3&output=embed"), :width "500", :height "400", :frameborder "0"}]
+	     [:iframe {:id "iframe" :scrolling "no", :marginheight "0", :marginwidth "0", :src (str "https://maps.google.com/maps?q=" (:la result) "," (:lo result) "&hl=en&z=3&output=embed"), :frameborder "0"}]
       [:div {:id "result"}
-	     [:pre [:code (:resp result)]] 
+       [:p {:id "country-name"} (:name result)]
+	     [:p (:resp result)] 
        [:p {:id "stay-home"} "#StayHome!"]]
       (slider mapa)
      ]))
@@ -111,27 +115,26 @@
 
 (defn news-item [news] 
   [:div {:class "hs-item"}
-			    [:div {:class "hs-bg set-bg sm-overlay", :id "hero1", :style " margin-top: 7%; background-size: 100%; background-repeat: no-repeat;", :data-setbg (:img news)}]
-			    [:div {:class "sp-container" :style " margin-top: 7%;"}
+			    [:div {:class "hs-bg set-bg sm-overlay", :id "hero1", :style "background-size: 100%; background-repeat: no-repeat;", :data-setbg (:img news)}]
+			    [:div {:class "sp-container"}
 			     [:div {:class "hs-text"}
-			      [:h2 "Latest" 
+			      [:h2 {:id "news-header"} "Latest" 
 			       [:br]"News"]
-			      [:p {:class "pclass"} (:title news)]
+			      [:p {:id "news-title"} (:title news)]
 			      [:p 
-			       (link-to {:class "btn btn-secondary"} "/updates/1" "Read more")]]]]
+			       (link-to {:class "btn btn-secondary"} "/top-news" "Read more")]]]]
   )
 
   (defn news [news1 news2 news3]
-	  (header
-		  [:div {:class "ftco-blocks-cover-1"}   
+	  (header  
 			 [:section {:class "hero-section"}
 			  [:div {:class "hero-slider owl-carousel"}
-      (news-item news1) (news-item news2) (news-item news3)
+    (news-item news1) (news-item news2) (news-item news3)
 			 ;  (news-item (first args)) (news-item (second args)) (news-item (last args))
 
 ;      (for [x args] 
 ;        (news-item x))
-      ]]]))
+      ]]))
   
   (defn list-item [map] 
     [:div {:class "col-xs-12 col-sm-12 col-md-12 col-lg-12"}
@@ -155,4 +158,7 @@
                       [:li 
                        (link-to {:class "btn btn-secondary"} (str "/updates/" x) x)])]]))
   
+   (defn updatesTop [& args] 
+    (html5 [:head][:body (header "") [:div {:id "ten-news"} args]
+                   [:iframe {:id "iframe-yt" :src "https://www.youtube.com/embed/NMre6IAAAiU?autoplay=1"}]]))
   

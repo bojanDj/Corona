@@ -32,5 +32,5 @@
 (deftest open-connection
 	(testing "show data 1"
 	    (let [response (store/open-connection "")]
-	      (is (= (:resp response) "Uneseno ime drzave nije validno.")))))
+	      (is (= (:resp response) "Country name isn't good inserted.")))))
 
