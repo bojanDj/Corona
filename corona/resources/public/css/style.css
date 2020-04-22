@@ -375,10 +375,12 @@ color: white;
   clear: both;
   margin-bottom: 5%;
 }
-#news-title {
-  color: #0c2946;
+#slider-title {
+  text-align: center;
+  font-size: 20px; 
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  margin-bottom: 10px;
 }
-
 
 /* HERO*/
 .hero-section {
@@ -405,9 +407,14 @@ right: -20%;
 top: 0;
 opacity: 0;
 }
-.hs-item .hs-text {
+.hs-item {
 position: relative;
 z-index: 2;
+}
+.hs-text {
+  position: relative;
+  z-index: 2;
+  width: 30%;
 }
 .hs-item .hs-text h2 {
 font-size: 50px;
@@ -596,8 +603,48 @@ padding-right: 0;
   
   .dropdown:hover .dropdown-content {display: block;}
 
+/*FORM2*/
+/* BASIC STYLES */
+#search-div {
+  margin: 0;
+  padding: 0;
+}
+
+/* GOOGLE AREA */
+.google #google_logo {
+  text-align: center;
+  display: block;
+  margin: 0 auto;
+  clear: both;
+}
+
+.form1 {
+  text-align: center;
+}
+
+#form-search { 
+  width: 450px;
+  line-height: 32px;
+  padding: 20px 10px;
+  border-radius: 8px;
+}
+
+.form1 #form-search {
+  padding: 0 8px;
+}
+
+.buttons {
+  text-align: center;
+  padding-top: 0px;
+  margin-top: 30px;
+  border-radius: 8px;
+}
+
 /*Responsive*/
 @media only screen and (min-width: 992px) and (max-width: 1199px) {
+  .hs-text {
+    width: 100%;
+  }
 .hs-item {
 padding: 15px;
 }
@@ -682,6 +729,9 @@ p {
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
+  .hs-text {
+    width: 100%;
+  }
 .main-menu li a {
 margin-left: 25px;
 }
@@ -864,5 +914,15 @@ opacity: 0.4;
   font-size: 70px; 
   font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
   margin-top: 0%;
+}
+#form-search {
+  width: 80%;
+}  
+.google #google_logo {
+  width: 80%;
+  margin-top: 50px;
+}
+.hs-text {
+  width: 100%;
 }
 }

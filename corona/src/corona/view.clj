@@ -1,6 +1,6 @@
 (ns corona.view
   (:require [hiccup.page :refer [html5]]
-            [hiccup.form :refer [form-to text-area submit-button]]
+            [hiccup.form :refer [form-to text-area submit-button text-field]]
             [hiccup.element :refer [link-to]]))
 
 (defn header [text]
@@ -52,12 +52,13 @@
 					        (link-to {:class "nav-link"} "/search" "Search")]
                  [:li 
                   [:div {:class "dropdown"}
-									 [:div {:class "dropbtn"} "Dropdown"]
+									 [:div {:class "dropbtn"} "News"]
 									 [:div {:class "dropdown-content"}
 									  (link-to {:class "nav-link" :style "float: left;"} "/top-news" "Top news")
 									  (link-to {:class "nav-link" :style "float: left;"} "/updates/1" "All news")]]]]]]]]]
           text
           ]))
+
 (defn slider-item [vest] 
   [:div {:class "col-sm-12 col-lg-4"} 
          [:div {:class "card", :style "width: 300px;margin: auto;"} 
@@ -67,8 +68,10 @@
            [:p {:class "card-text"} (:desc vest)]
            [:button {:type "button", :class "btn btn-secondary"} "Read more"]]]]
   )
+
 (defn slider [mapa] 
   [:div {:class "container-fluid"} 
+   [:div {:id "slider-title"} "News in searched county"] 
  [:div {:class "row"}
   [:div {:class "col-sm-12"}  
    [:div {:id "inam", :class "carousel slide", :data-ride "carousel"}
@@ -106,12 +109,15 @@
 
 (defn render-form []
   (header
-	  [:div {:id "form"}
-	          (form-to [:post "/search"]
-	                   (text-area {:cols 75
-	                               :rows 1} "content")
-	                   [:div]
-	                   (submit-button "Search for country..."))]))
+	  [:div {:id "search-div"}
+	    [:div {:class "google"}
+	     [:img {:id "google_logo" :src "https://image.freepik.com/free-photo/coronavirus-text-white-background_69593-8167.jpg" :alt "slika"}]]
+     [:div {:class "form1"}
+	     (form-to [:post "/search"]
+		                   (text-field {:id "form-search" :placeholder "Type country name..."} "content")
+		                   [:div]
+		                   (submit-button {:class "buttons"} "Search for country..."))]]
+     ))
 
 (defn news-item [news] 
   [:div {:class "hs-item"}
@@ -136,29 +142,29 @@
 ;        (news-item x))
       ]]))
   
-  (defn list-item [map] 
-    [:div {:class "col-xs-12 col-sm-12 col-md-12 col-lg-12"}
-			 [:div {:class "thumbnail"}
-			  [:div {:class "post_title"} (:title map)]
-			  [:img {:src (:img map), :class "img-responsive", :alt "slika", :style "border-radius:8px; height: 50%;"}]
-			  [:div {:class "caption"}
-			   [:p (:desc map)]
-			   [:details 
-			    [:summary "Read more"]
-			    [:p (:content map)]]
-			   [:div {:class "text-right"}
-			    [:p "16.04.2020."]]]]]
-    )
+(defn list-item [map] 
+  [:div {:class "col-xs-12 col-sm-12 col-md-12 col-lg-12"}
+		 [:div {:class "thumbnail"}
+		  [:div {:class "post_title"} (:title map)]
+		  [:img {:src (:img map), :class "img-responsive", :alt "slika", :style "border-radius:8px; height: 50%;"}]
+		  [:div {:class "caption"}
+		   [:p (:desc map)]
+		   [:details 
+		    [:summary "Read more"]
+		    [:p (:content map)]]
+		   [:div {:class "text-right"}
+		    [:p "16.04.2020."]]]]]
+  )
 
-  (defn updates [& args] 
-    (html5 [:head][:body (header "") [:div {:id "ten-news"} args]
-                   [:iframe {:id "iframe-yt" :src "https://www.youtube.com/embed/NMre6IAAAiU?autoplay=1"} ]
-                   [:ul {:class "next-page-buttons"}
-                    (for [x (range 1 6)]
-                      [:li 
-                       (link-to {:class "btn btn-secondary"} (str "/updates/" x) x)])]]))
+(defn updates [& args] 
+  (html5 [:head][:body (header "") [:div {:id "ten-news"} args]
+                 [:iframe {:id "iframe-yt" :src "https://www.youtube.com/embed/NMre6IAAAiU?autoplay=1"} ]
+                 [:ul {:class "next-page-buttons"}
+                  (for [x (range 1 6)]
+                    [:li 
+                     (link-to {:class "btn btn-secondary"} (str "/updates/" x) x)])]]))
   
-   (defn updatesTop [& args] 
-    (html5 [:head][:body (header "") [:div {:id "ten-news"} args]
-                   [:iframe {:id "iframe-yt" :src "https://www.youtube.com/embed/NMre6IAAAiU?autoplay=1"}]]))
+ (defn updatesTop [& args] 
+  (html5 [:head][:body (header "") [:div {:id "ten-news"} args]
+                 [:iframe {:id "iframe-yt" :src "https://www.youtube.com/embed/NMre6IAAAiU?autoplay=1"}]]))
   

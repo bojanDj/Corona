@@ -27,10 +27,10 @@
     (let [store (:store system-for-test)
           uuid (corona.store/insert-country-in-db store "serbia")
           response (corona.store/get-country-by-uuid store uuid)]
-      (is (= (:name response) "serbia")))))
+      (is (= (:name response) "Serbia")))))
 
 (deftest open-connection
 	(testing "show data 1"
 	    (let [response (store/open-connection "")]
-	      (is (= (:resp response) "Country name isn't good inserted.")))))
+	      (is (= (:resp response) "Country name isn't well inserted.")))))
 

@@ -62,7 +62,7 @@
   component/Lifecycle
 
   (start [this]
-    (assoc this :server (http/start-server (app (:store this)) {:port 8096})))
+    (assoc this :server (http/start-server (app (:store this)) {:port 8090})))
 
   (stop [this]
     (dissoc this :server)))

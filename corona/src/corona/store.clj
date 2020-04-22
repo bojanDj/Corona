@@ -17,15 +17,15 @@
    (def inline "")
    (while (.hasNext sc) (do (def inline (str inline (.nextLine sc)))))
    (.close sc)
-   (def json (json/read-str inline :key-fn keyword))
-   (let [stri (str (.toUpperCase (.substring stri 0 1)) (.substring stri 1))
+   (let [json (json/read-str inline :key-fn keyword)
+         stri (str (.toUpperCase (.substring stri 0 1)) (.toLowerCase (.substring stri 1)))
          confirmed (:confirmed (:latest json))
          deaths (:deaths (:latest json))
          population (get-in (:locations json) [0 :country_population])
-         casePerMil (/ (* confirmed 1000000) population)
-         deadPerMil (/ (* deaths 1000000) population)
+         casePerMil (float (/ (* confirmed 1000000) population))
+         deadPerMil (float (/ (* deaths 1000000) population))
          mapa {:resp (str stri " has " (:confirmed (:latest json)) " people infected with the coronavirus, which is " 
-	                        (/ (* confirmed 1000000) population) " cases per milion of people. \nAlso " stri " has " 
+	                        casePerMil " cases per milion of people. \nAlso " stri " has " 
 	                        (:deaths (:latest json)) " people died from corona, which is  " 
 	                        deadPerMil " dead people per one milion.") 
 	             :name stri
@@ -37,7 +37,7 @@
 )
 (defn open-connection [stri] 
   (let [url (new java.net.URL (str "https://coronavirus-tracker-api.herokuapp.com/v2/locations?country=" stri))
-        map {:resp "Country name isn't good inserted."
+        map {:resp "Country name isn't well inserted."
              :name "Sorry..."}
         con (doto (.. url openConnection)
                   (.setInstanceFollowRedirects false)
@@ -53,13 +53,14 @@
             (def inline "")
             (while (.hasNext sc) (do (def inline (str inline (.nextLine sc)))))
             (.close sc)
-            (def json (json/read-str inline :key-fn keyword))
-            (def mapa {:title (get-in (:articles json) [rb :title]) 
-                       :desc (get-in (:articles json) [rb :description]) 
-                       :img (get-in (:articles json) [rb :urlToImage]) 
-                       :content (get-in (:articles json) [rb :content])
-                       })
-            mapa
+            (let [json (json/read-str inline :key-fn keyword)
+                  mapa {:title (get-in (:articles json) [rb :title]) 
+	                       :desc (get-in (:articles json) [rb :description]) 
+	                       :img (get-in (:articles json) [rb :urlToImage]) 
+	                       :content (get-in (:articles json) [rb :content])
+	                       }]
+	            mapa
+            )
            )
          )
 
