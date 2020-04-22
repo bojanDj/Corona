@@ -1,6 +1,9 @@
 # corona
 
 A Clojure web application designed to track coronavirus, show statistics and news about it.
+	Home page presents top 3 news.
+	Search page based on country name inputed (e.g. "serbia") shows statistics about coronavirus in that country and news in that country about virus.
+	Top news and all news show top and all news about coronavirus from all around world. 
 
 ## Prerequisites
 
