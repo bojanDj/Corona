@@ -2,11 +2,16 @@
   (:require [com.stuartsierra.component :as component]
             [corona.server :as server]
             [corona.store :as store]
+            [clojure.test :refer :all]
+            [corona.config :refer :all]
+            [clj-webdriver.taxi :refer :all]
             [clojure.tools.logging :refer [error]]))
 
 (def system nil)
 
-(defn build-system []
+(defn build-system 
+  "Build sistem"
+  []
   (try
     (-> (component/system-map
          :server (server/make-server)
@@ -15,23 +20,32 @@
     (catch Exception e
       (error "Failed to build system" e))))
 
-(defn init []
+(defn init 
+  "Initialize system"
+  []
   (let [sys (build-system)]
     (alter-var-root #'system (constantly sys))))
 
-(defn start []
+(defn start
+  "Start system"
+  []
   (alter-var-root #'system component/start-system)
   (println "Start"))
 
-(defn stop []
+(defn stop 
+  "Stop system"
+  []
   (alter-var-root #'system component/stop-system))
 
-(defn -main []
+(defn -main
+  "Main function"
+  []
   (init)
   (start))
 
-(defn test-system [] 
+(defn test-system 
+  "Test system"
+  [] 
   (init)
   (start)
-  system
-)
+  system)

@@ -20,7 +20,9 @@ To start a web server for the application, run:
 To run tests, run:
 
 	lein test
-	
+
+For automated testing you will need Firefox 39 or lower.
+
 ## License
 
 Copyright © 2020 Bojan Djekic
